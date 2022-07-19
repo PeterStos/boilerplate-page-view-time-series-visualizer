@@ -33,17 +33,16 @@ def draw_bar_plot():
     dfp = pd.pivot_table(data=df, index=df.index.year, values='value', columns='months')
     
     # Plot
-    ax = dfp.plot(kind='bar', figsize=(8,8))
-    ax.set_ylabel('Avarage Page Views')
-    ax.set_xlabel('Years')
-    ax.legend(title="Months")
-
+    fig = dfp.plot.bar(figsize=(8,8)).figure 
+    plt.ylabel('Average Page Views')
+    plt.xlabel('Years')
+    
     # Save image and return fig (don't change this part)
-    plt.savefig('bar_plot.png')
-    return plt
+    fig.savefig('bar_plot.png')
+    return fig
 
 def draw_box_plot():
-    # Prepare data for box plots (this part is done!)
+# Prepare data for box plots (this part is done!)
     df_box = df.copy()
     df_box.reset_index(inplace=True)
     
@@ -53,9 +52,10 @@ def draw_box_plot():
     # Draw box plots (using Seaborn)
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(16,7))
     axes[0] = sns.boxplot( x=df_box.year, y=df_box['value'], ax=axes[0]).set(title='Year-wise Box Plot (Trend)', xlabel='Year', ylabel='Page Views')
-    axes[1] = sns.boxplot( x=df_box.month, y=df_box['value'], ax=axes[1]).set(title='Month-wise Box Plot (Seasonality)',xlabel='Month', ylabel='Page Views')
-    fig.show()
-    
+    axes[1] = sns.boxplot( x=df_box['date'].dt.month, y=df_box['value'], ax=axes[1]).set(title='Month-wise Box Plot (Seasonality)',xlabel='Month', ylabel='Page Views')
+    plt.xticks([0,1,2,3,4,5,6,7,8,9,10,11],['Jan','Feb','Mar','Apr','May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+
+    #fig.show()
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
     return fig
